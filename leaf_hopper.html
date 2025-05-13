@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaf Hopper | Forest Adventure</title>
+    <link rel="stylesheet" href="leaf_hopper.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍃</text></svg>">
+    <meta name="description" content="Leaf Hopper - A forest-themed maze adventure game where you play as a glowing forest spirit collecting light orbs.">
+    
+    <style>
+        /* Emergency fix for MetaMask dialog buttons */
+        .metamask-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 999999;
+            pointer-events: none;
+        }
+        
+        /* Make MetaMask dialog always visible and clickable */
+        div[role="dialog"],
+        .MuiDialog-root,
+        .MuiModal-root,
+        .confirm-page-container-footer,
+        [data-testid="page-container-footer-next"],
+        [data-testid="confirmation-footer"],
+        .popover-container {
+            z-index: 2147483647 !important; /* Max z-index */
+            pointer-events: auto !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- MetaMask overlay container (will be positioned above all content) -->
+    <div id="metamaskOverlay" class="metamask-overlay"></div>
+    
+    <!-- MetaMask Authentication overlay -->
+    <div class="auth-overlay" id="authOverlay">
+        <div class="auth-container">
+            <h1><i class="fas fa-leaf"></i> Leaf Hopper</h1>
+            <p>Connect with MetaMask to play this game</p>
+            <div class="metamask-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask logo">
+            </div>
+            <button id="connectWallet" class="metamask-button">
+                <i class="fas fa-wallet"></i> Connect Wallet
+            </button>
+            <div id="walletInfo" class="wallet-info" style="display: none;">
+                <p>Connected: <span id="accountDisplay">Not connected</span></p>
+                <button id="startAfterAuth" class="start-button">
+                    <i class="fas fa-play"></i> Start Game
+                </button>
+            </div>
+            <div class="skip-option">
+                <a href="#" id="skipAuth">Skip authentication (demo mode)</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading screen -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading Forest World...</div>
+        <div class="loading-fallback">
+            <p>Taking too long? <a href="#" id="manualContinue">Click here to continue</a></p>
+        </div>
+    </div>
+
+    <!-- Header with score -->
+    <div class="game-header">
+        <div class="score-container">
+            <span><i class="fas fa-lightbulb"></i> Light Orbs</span>
+            <span id="scoreC">0</span>
+        </div>
+        <div class="level-container">
+            <span><i class="fas fa-layer-group"></i> Level</span>
+            <span id="levelCounter">1</span>
+        </div>
+        <div class="wallet-display">
+            <span><i class="fas fa-wallet"></i></span>
+            <span id="headerWalletAddress">Not Connected</span>
+        </div>
+    </div>
+    
+    <!-- Token display -->
+    <div class="token-display">
+        <i class="fas fa-coins"></i>
+        <span>Forest Tokens: <span class="token-count" id="tokenBalanceDisplay">0</span></span>
+    </div>
+    
+    <!-- NFT Collection Button -->
+    <div class="nft-collection-button" title="View your NFT collection" id="viewNftCollectionBtn">
+        <i class="fas fa-medal"></i>
+    </div>
+    
+    <!-- Main game container -->
+    <div class="game-container">
+        <canvas id="gameCanvas"></canvas>
+        
+        <!-- Start screen -->
+        <div id="start">
+            <h1><i class="fas fa-leaf"></i> Leaf Hopper</h1>
+            <p>Guide your forest spirit through the mystical maze. Collect light orbs while avoiding poisonous beetles!</p>
+            <div class="metamask-status">
+                <span><i class="fas fa-wallet"></i> Wallet: <span id="walletAddressShort">Not Connected</span></span>
+            </div>
+            <div class="character-preview">
+                <!-- Character preview will be rendered by JS -->
+            </div>
+            <a href="#" onclick="startGame()"><i class="fas fa-play"></i> <span>Start Adventure</span></a>
+        </div>
+        
+        <!-- Game over screen -->
+        <div id="game-over" style="display: none;">
+            <h1><i class="fas fa-bug"></i> Game Over</h1>
+            <p>The beetles caught your forest spirit!</p>
+            <div class="final-score">
+                <p>Your Orbs</p>
+                <span id="finalScore">0</span>
+                <p>Level <span id="finalLevel">1</span></p>
+            </div>
+            <a href="#" onclick="restartGame()"><i class="fas fa-redo"></i> <span>Play Again</span></a>
+        </div>
+    </div>
+    
+    <!-- Floating instructions -->
+    <div class="instructions">
+        <h3><i class="fas fa-gamepad"></i> Controls</h3>
+        <ul>
+            <li><strong>Move Up</strong> <span class="key">W</span> or <span class="key">↑</span></li>
+            <li><strong>Move Left</strong> <span class="key">A</span> or <span class="key">←</span></li>
+            <li><strong>Move Down</strong> <span class="key">S</span> or <span class="key">↓</span></li>
+            <li><strong>Move Right</strong> <span class="key">D</span> or <span class="key">→</span></li>
+            <li><strong>Pause</strong> <span class="key">P</span> or <span class="key">ESC</span></li>
+            <li><strong>Sound</strong> <span class="key">M</span></li>
+        </ul>
+    </div>
+    
+    <!-- Sound toggle -->
+    <div class="sound-toggle">
+        <button id="soundToggle"><i class="fas fa-volume-up"></i></button>
+    </div>
+    
+    <!-- Decorative forest background elements -->
+    <div class="forest-elements"></div>
+
+    <!-- Add Web3.js -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
+    
+    <script src="leaf_hopper_fixed.js"></script>
+    
+    <script>
+        // MetaMask UI fix - will move any MetaMask dialogs to the overlay
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to check for MetaMask modals every 500ms
+            setInterval(function() {
+                // Look for MetaMask dialogs
+                const metamaskDialogs = document.querySelectorAll('div[role="dialog"], .MuiDialog-root, .MuiModal-root');
+                
+                if (metamaskDialogs.length > 0) {
+                    // Move them to the overlay if not already there
+                    metamaskDialogs.forEach(dialog => {
+                        // Only move if not already moved
+                        if (dialog.parentElement !== document.getElementById('metamaskOverlay')) {
+                            document.getElementById('metamaskOverlay').appendChild(dialog);
+                            
+                            // Ensure all buttons are clickable
+                            const buttons = dialog.querySelectorAll('button');
+                            buttons.forEach(button => {
+                                button.style.pointerEvents = 'auto';
+                                button.style.position = 'relative';
+                                button.style.zIndex = '2147483647';
+                            });
+                            
+                            console.log('MetaMask dialog moved to overlay');
+                        }
+                    });
+                    
+                    // Make sure the overlay allows pointer events when a dialog is present
+                    document.getElementById('metamaskOverlay').style.pointerEvents = 'auto';
+                } else {
+                    // Reset overlay to not capture clicks when no dialog is present
+                    document.getElementById('metamaskOverlay').style.pointerEvents = 'none';
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,1319 @@
+:root {
+    --primary-green: #62c462;
+    --primary-green-rgb: 98, 196, 98;
+    --dark-green: #0a3d0a;
+    --dark-green-rgb: 10, 61, 10;
+    --light-green: #bef992;
+    --glow-green: rgba(98, 196, 98, 0.7);
+    --gold: #ffff9d;
+    --gold-rgb: 255, 255, 157;
+    --metamask-orange: #f6851b;
+    --metamask-dark: #151326;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap');
+
+body {
+    margin: 0;
+    background: linear-gradient(135deg, #0a3d0a 0%, #145214 50%, #0a3d0a 100%);
+    padding: 0;
+    font-family: 'Quicksand', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    animation: backgroundPulse 30s ease-in-out infinite;
+}
+
+@keyframes backgroundPulse {
+    0%, 100% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+}
+
+/* Game Container Styling */
+.game-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 10px;
+}
+
+#gameCanvas {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Start and Game Over screens */
+#start, #game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(10, 61, 10, 0.8);
+    border-radius: 20px;
+    box-shadow: 0 0 30px var(--glow-green);
+    text-align: center;
+    border: 3px solid var(--primary-green);
+    padding: 30px;
+    width: 400px;
+    max-width: 80%;
+    z-index: 10;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-bottom: 2px solid var(--primary-green);
+    box-shadow: 0 2px 15px var(--glow-green);
+    position: relative;
+    z-index: 10;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+.score-container {
+    display: flex;
+    align-items: center;
+    color: var(--light-green);
+    font-size: 1.5rem;
+    text-shadow: 0 0 10px rgba(190, 249, 146, 0.5);
+    font-weight: bold;
+    position: relative;
+}
+
+.level-container {
+    display: flex;
+    align-items: center;
+    color: var(--gold);
+    font-size: 1.5rem;
+    text-shadow: 0 0 10px rgba(255, 255, 157, 0.5);
+    font-weight: bold;
+    position: relative;
+}
+
+.score-container span:first-child {
+    background-color: rgba(10, 61, 10, 0.7);
+    padding: 5px 15px;
+    border-radius: 20px;
+    margin-right: 10px;
+    border: 1px solid var(--primary-green);
+    position: relative;
+    overflow: hidden;
+}
+
+.score-container span:first-child::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(30deg);
+    animation: shimmer 5s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%) rotate(30deg); }
+    100% { transform: translateX(100%) rotate(30deg); }
+}
+
+.score-container span:last-child {
+    color: var(--gold);
+    font-size: 1.7rem;
+    text-shadow: 0 0 12px rgba(255, 255, 157, 0.7);
+    transition: all 0.3s ease;
+}
+
+.level-container span:first-child {
+    background-color: rgba(10, 61, 10, 0.7);
+    padding: 5px 15px;
+    border-radius: 20px;
+    margin-right: 10px;
+    border: 1px solid var(--primary-green);
+    position: relative;
+    overflow: hidden;
+}
+
+.level-container span:first-child::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(30deg);
+    animation: shimmer 5s infinite;
+}
+
+.level-container span:last-child {
+    color: var(--primary-green);
+    font-size: 1.7rem;
+    text-shadow: 0 0 12px rgba(98, 196, 98, 0.7);
+    transition: all 0.3s ease;
+}
+
+/* Wallet Display in Header */
+.wallet-display {
+    display: flex;
+    align-items: center;
+    color: var(--metamask-orange);
+    font-size: 1.1rem;
+    text-shadow: 0 0 10px rgba(246, 133, 27, 0.4);
+    font-weight: bold;
+    position: relative;
+    background-color: rgba(10, 61, 10, 0.7);
+    padding: 5px 15px;
+    border-radius: 20px;
+    border: 1px solid var(--metamask-orange);
+    overflow: hidden;
+}
+
+.wallet-display span:first-child {
+    margin-right: 10px;
+}
+
+.wallet-display span:last-child {
+    color: #f8f8f8;
+    font-size: 0.95rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+    white-space: nowrap;
+    display: inline-block;
+    font-weight: 500;
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+    .game-header {
+        padding: 8px 10px;
+    }
+    
+    .score-container {
+        font-size: 1.2rem;
+    }
+    
+    #start, #game-over {
+        width: 90%;
+        max-width: 350px;
+        padding: 25px;
+    }
+    
+    #start h1, #game-over h1 {
+        font-size: 2.5rem;
+    }
+    
+    .instructions {
+        bottom: 10px;
+        right: 10px;
+        max-width: 200px;
+        font-size: 0.8rem;
+        padding: 15px;
+    }
+    
+    .blockchain-notification {
+        bottom: 15px;
+        right: 15px;
+        max-width: calc(100% - 30px);
+        padding: 15px;
+    }
+    
+    .notification-icon {
+        font-size: 1.5rem;
+        width: 30px;
+        height: 30px;
+    }
+    
+    .token-display {
+        font-size: 0.9rem;
+        padding: 4px 12px;
+        top: 70px;
+        left: 10px;
+    }
+    
+    .sound-toggle {
+        top: 15px;
+        right: 70px;
+    }
+    
+    .sound-toggle button {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+    
+    .nft-collection-button {
+        bottom: 70px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+    
+    .wallet-display {
+        font-size: 0.9rem;
+        padding: 4px 8px;
+        max-width: 100px;
+    }
+    
+    .wallet-display span:last-child {
+        max-width: 60px;
+    }
+}
+
+.sound-toggle {
+    position: fixed;
+    top: 20px;
+    right: 100px;
+    z-index: 10;
+}
+
+.sound-toggle button {
+    background: rgba(10, 61, 10, 0.7);
+    border: 2px solid var(--primary-green);
+    color: var(--light-green);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3rem;
+    transition: all 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    box-shadow: 0 2px 10px rgba(var(--primary-green-rgb, 98, 196, 98), 0.4);
+}
+
+.sound-toggle button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px var(--glow-green);
+    background-color: rgba(var(--primary-green-rgb, 98, 196, 98), 0.2);
+}
+
+.sound-toggle button:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgba(var(--primary-green-rgb, 98, 196, 98), 0.3);
+}
+
+.sound-toggle button.muted {
+    background: rgba(180, 50, 50, 0.7);
+    border-color: rgba(200, 80, 80, 1);
+    color: #f0c9c9;
+}
+
+.sound-toggle button.muted:hover {
+    background: rgba(200, 60, 60, 0.8);
+    border-color: rgba(220, 90, 90, 1);
+}
+
+.character-preview {
+    width: 120px;
+    height: 120px;
+    margin: 25px auto;
+    position: relative;
+    border-radius: 50%;
+    background-color: rgba(10, 61, 10, 0.5);
+    box-shadow: 0 0 25px rgba(98, 196, 98, 0.4), inset 0 0 15px rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: previewFloat 3s ease-in-out infinite;
+    border: 3px solid var(--primary-green);
+}
+
+@keyframes previewFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* MetaMask Authentication */
+.auth-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.auth-container {
+    background: linear-gradient(135deg, var(--metamask-dark) 0%, #263238 100%);
+    width: 450px;
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(246, 133, 27, 0.5);
+    text-align: center;
+    color: #fff;
+    border: 3px solid var(--metamask-orange);
+    animation: floatAuthContainer 4s ease-in-out infinite;
+}
+
+@keyframes floatAuthContainer {
+    0%, 100% {
+        transform: translateY(0) perspective(1000px) rotateX(1deg);
+    }
+    50% {
+        transform: translateY(-10px) perspective(1000px) rotateX(-1deg);
+    }
+}
+
+.auth-container h1 {
+    font-size: 2.5rem;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    text-shadow: 0 0 10px rgba(255, 255, 157, 0.5);
+}
+
+.auth-container p {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    color: #f0f0f0;
+}
+
+.metamask-logo {
+    margin: 1.5rem auto;
+    width: 100px;
+    height: 100px;
+    animation: logoFloat 3s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.metamask-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.metamask-button {
+    background: linear-gradient(135deg, #f6851b 0%, #e2761b 100%);
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    font-size: 1.2rem;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 1rem 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(246, 133, 27, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 80%;
+    margin: 1rem auto;
+}
+
+.metamask-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(246, 133, 27, 0.6);
+}
+
+.metamask-button:active {
+    transform: translateY(1px);
+}
+
+.wallet-info {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.wallet-info p {
+    font-size: 0.9rem;
+    color: #ccc;
+    word-break: break-all;
+    margin-bottom: 0.8rem;
+}
+
+.start-button {
+    background: linear-gradient(135deg, var(--primary-green) 0%, #419641 100%);
+    color: white;
+    border: none;
+    padding: 0.7rem 1.8rem;
+    font-size: 1.1rem;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(98, 196, 98, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 60%;
+    margin: 0.5rem auto;
+}
+
+.start-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(98, 196, 98, 0.6);
+}
+
+.skip-option {
+    margin-top: 2rem;
+    font-size: 0.95rem;
+}
+
+.skip-option a {
+    color: #bdbdbd;
+    text-decoration: none;
+    transition: color 0.3s, text-shadow 0.3s;
+    padding: 5px 0;
+}
+
+.skip-option a:hover {
+    color: var(--gold);
+    text-decoration: underline;
+    text-shadow: 0 0 5px var(--gold);
+}
+
+.metamask-status {
+    background-color: rgba(0,0,0, 0.3);
+    padding: 10px 18px;
+    border-radius: 20px;
+    margin: 0 auto 25px;
+    border: 1px solid rgba(var(--primary-green-rgb), 0.5);
+    display: inline-block;
+    color: var(--light-green);
+    font-size: 0.9rem;
+    box-shadow: 0 0 10px rgba(var(--primary-green-rgb), 0.2);
+}
+
+.metamask-status i {
+    margin-right: 8px;
+    color: var(--primary-green);
+}
+
+/* Blockchain Notifications */
+.blockchain-notification {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+    max-width: 400px;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+    z-index: 9999;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    border-left: 5px solid #888;
+    pointer-events: auto;
+}
+
+.blockchain-notification.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.blockchain-notification.success {
+    border-left: 5px solid #62c462;
+}
+
+.blockchain-notification.error {
+    border-left: 5px solid #ee5f5b;
+}
+
+.blockchain-notification.minting {
+    border-left: 5px solid var(--metamask-orange);
+}
+
+.blockchain-notification.rewarding {
+    border-left: 5px solid #f8d347;
+}
+
+.blockchain-notification.info {
+    border-left: 5px solid #5bc0de;
+}
+
+.blockchain-notification.warning {
+    border-left: 5px solid #f0ad4e;
+}
+
+.notification-icon {
+    font-size: 2rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.blockchain-notification.success .notification-icon {
+    color: #62c462;
+}
+
+.blockchain-notification.error .notification-icon {
+    color: #ee5f5b;
+}
+
+.blockchain-notification.minting .notification-icon {
+    color: var(--metamask-orange);
+}
+
+.blockchain-notification.rewarding .notification-icon {
+    color: #f8d347;
+}
+
+.blockchain-notification.info .notification-icon {
+    color: #5bc0de;
+}
+
+.blockchain-notification.warning .notification-icon {
+    color: #f0ad4e;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-content h3 {
+    margin: 0 0 5px 0;
+    font-size: 1.1rem;
+}
+
+.notification-content p {
+    margin: 0 0 5px 0;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.notification-details {
+    font-size: 0.8rem;
+    color: #aaa;
+    word-break: break-all;
+}
+
+.notification-details a {
+    color: var(--metamask-orange);
+    text-decoration: none;
+}
+
+.notification-details a:hover {
+    text-decoration: underline;
+}
+
+/* Token Display */
+.token-display {
+    position: fixed;
+    top: 80px;
+    left: 20px;
+    background-color: rgba(10, 61, 10, 0.85);
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    border-radius: 30px;
+    padding: 6px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    z-index: 100;
+    box-shadow: 0 0 15px rgba(248, 211, 71, 0.3);
+    animation: pulseTokenDisplay 2.5s infinite ease-in-out;
+}
+
+@keyframes pulseTokenDisplay {
+    0% { box-shadow: 0 0 15px rgba(248, 211, 71, 0.3); }
+    50% { box-shadow: 0 0 22px rgba(248, 211, 71, 0.5); }
+    100% { box-shadow: 0 0 15px rgba(248, 211, 71, 0.3); }
+}
+
+.token-display i {
+    margin-right: 5px;
+    font-size: 1.2em;
+}
+
+.token-display .token-count {
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(248, 211, 71, 0.5);
+}
+
+/* NFT Collection Button */
+.nft-collection-button {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    background-color: rgba(10, 61, 10, 0.8);
+    border: 2px solid var(--metamask-orange);
+    color: white;
+    border-radius: 50%;
+    width: 55px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 100;
+    box-shadow: 0 2px 15px rgba(246, 133, 27, 0.3);
+    font-size: 1.6rem;
+    transition: all 0.3s ease;
+}
+
+.nft-collection-button:hover {
+    transform: scale(1.1);
+    background-color: rgba(20, 71, 20, 0.9);
+    box-shadow: 0 4px 25px rgba(246, 133, 27, 0.6);
+}
+
+/* NFT Collection Modal */
+.nft-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.nft-modal-overlay.show {
+    opacity: 1;
+}
+
+.nft-modal-content {
+    background: linear-gradient(135deg, var(--dark-green) 0%, #1a4520 100%);
+    border-radius: 15px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 20px;
+    box-shadow: 0 0 30px rgba(246, 133, 27, 0.4);
+    border: 3px solid var(--metamask-orange);
+    transform: translateY(50px);
+    transition: transform 0.3s ease;
+}
+
+.nft-modal-overlay.show .nft-modal-content {
+    transform: translateY(0);
+}
+
+.nft-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.nft-modal-header h2 {
+    color: var(--gold);
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.close-modal-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+    transition: all 0.2s ease;
+}
+
+.close-modal-btn:hover {
+    color: var(--gold);
+    transform: scale(1.1);
+}
+
+.nft-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 10px;
+}
+
+.nft-card {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nft-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border-color: var(--metamask-orange);
+}
+
+.nft-image {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+}
+
+.nft-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.nft-card:hover .nft-image img {
+    transform: scale(1.05);
+}
+
+.nft-info {
+    padding: 15px;
+    color: white;
+}
+
+.nft-info h3 {
+    margin: 0 0 10px;
+    color: var(--light-green);
+    font-size: 1.1rem;
+}
+
+.nft-info p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: #eee;
+}
+
+.nft-date {
+    color: #aaa;
+    font-size: 0.8rem !important;
+    margin-top: 10px !important;
+}
+
+.no-nfts {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px 20px;
+    color: #aaa;
+}
+
+.no-nfts i {
+    font-size: 3rem;
+    color: var(--metamask-orange);
+    margin-bottom: 15px;
+    opacity: 0.7;
+}
+
+.no-nfts p {
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+    .nft-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .nft-modal-header h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Network Switch Button */
+.switch-network-btn {
+    background: linear-gradient(135deg, var(--metamask-orange) 0%, #e2761b 100%);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 0.8rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(246, 133, 27, 0.4);
+}
+
+.switch-network-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(246, 133, 27, 0.6);
+}
+
+.switch-network-btn:active {
+    transform: translateY(1px);
+}
+
+/* Fix for MetaMask confirmation dialog */
+.metamask-confirm-transaction-notification {
+    z-index: 10000;
+    pointer-events: auto;
+}
+
+/* Improved MetaMask popup text visibility */
+.web3modal-modal-card,
+.web3modal-provider-wrapper,
+.web3modal-provider-container,
+div[role="dialog"],
+[data-testid="popover-container"],
+[data-testid="confirmation-footer"],
+[data-testid="page-container-footer-next"],
+.MuiDialog-root,
+.MuiModal-root,
+.confirm-page-container-footer,
+.page-container__footer,
+.confirm-page-container-header,
+.box-flex,
+.confirm-page-container-summary-row,
+.transaction-detail-item {
+    color: #000000 !important;
+    text-shadow: none !important;
+    z-index: 100000 !important;
+    pointer-events: auto !important;
+}
+
+/* Make MetaMask popup background white */
+.box-flex,
+.confirm-page-container-summary,
+.page-container__content,
+.confirm-page-container-content,
+[data-testid="confirmation-footer"],
+[data-testid="page-container-footer-next"],
+.confirm-page-container-header,
+.transaction-detail-item,
+.confirm-page-container-summary-row {
+    background-color: white !important;
+}
+
+/* Make MetaMask popup text black */
+.box-flex *,
+.confirm-page-container-summary *,
+.page-container__content *,
+.confirm-page-container-content *,
+.confirm-page-container-header *,
+.transaction-detail-item *,
+.confirm-page-container-summary-row *,
+.box-flex span,
+.box-flex div,
+.box-flex h1,
+.box-flex h2,
+.box-flex h3,
+.box-flex h4,
+.box-flex p,
+.page-container__title,
+.sender-to-recipient__name,
+.sender-to-recipient__address {
+    color: #000000 !important;
+    text-shadow: none !important;
+}
+
+/* Style for MetaMask confirm button */
+.button.btn-primary,
+.button.btn--rounded.btn-primary,
+[data-testid="page-container-footer-next"] button,
+.page-container__footer button,
+.button.btn-primary--lg {
+    background-color: #037DD6 !important;
+    color: white !important;
+    border-color: #037DD6 !important;
+    border-radius: 4px !important;
+    font-weight: bold !important;
+    text-shadow: none !important;
+    border: none !important;
+    padding: 10px 15px !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    z-index: 999999 !important;
+    position: relative !important;
+}
+
+/* Additional text color overrides */
+.confirm-detail-row,
+.transaction-breakdown-row,
+.transaction-breakdown-row-title,
+.transaction-breakdown-row__title,
+.transaction-breakdown-row__value,
+.currency-display-component,
+.currency-display-component__text,
+.currency-display-component__suffix {
+    color: #000000 !important;
+    text-shadow: none !important;
+}
+
+/* MetaMask dialog backdrop */
+.modal-container,
+.modal-container__content,
+.modal-content,
+.modal-content__dialog,
+.modal,
+.modal__content,
+.modal__backdrop {
+    z-index: 999999 !important;
+    pointer-events: auto !important;
+}
+
+/* Enhanced Loading Screen Styles */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(10, 25, 10, 0.9); /* Darker, slightly transparent green */
+    display: flex; /* Will be controlled by JS */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; /* Ensure it's on top */
+    opacity: 1; /* Will be controlled by JS for fade out */
+    transition: opacity 0.5s ease-in-out;
+    color: var(--light-green);
+}
+
+.loading-overlay.delayed .loading-fallback {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.loading-spinner {
+    border: 6px solid rgba(190, 249, 146, 0.2); /* Light green, semi-transparent border */
+    border-top: 6px solid var(--gold); /* Gold color for the spinning part */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1.5s linear infinite, pulseGlow 2s ease-in-out infinite alternate;
+    margin-bottom: 25px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 15px var(--glow-green); }
+    100% { box-shadow: 0 0 30px var(--gold), 0 0 40px var(--glow-green); }
+}
+
+.loading-text {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px var(--glow-green);
+    letter-spacing: 1px;
+}
+
+.loading-fallback {
+    margin-top: 30px;
+    font-size: 0.9rem;
+    color: var(--light-green);
+    opacity: 0; /* Hidden by default, shown by JS adding 'delayed' class */
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.loading-fallback p {
+    margin-bottom: 10px;
+}
+
+.loading-fallback a {
+    color: var(--gold);
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+.loading-fallback a:hover {
+    color: #fff;
+    text-shadow: 0 0 8px var(--gold);
+}
+
+/* Ensure these styles are placed before any media queries or general utility classes if they exist,
+   or at a suitable place for component styles. */
+
+.score-container span:first-child i,
+.level-container span:first-child i,
+.wallet-display span:first-child i {
+    margin-right: 8px;
+    opacity: 0.9;
+}
+
+#start h1, #game-over h1 {
+    font-size: 3rem;
+    color: var(--gold);
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px rgba(255, 255, 157, 0.6), 0 0 20px rgba(255, 255, 157, 0.3);
+    letter-spacing: 1px;
+}
+
+#start p, #game-over p {
+    color: var(--light-green);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Styling for buttons within start/game-over screens */
+#start a, #game-over a {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary-green) 0%, #4cae4c 100%);
+    color: white;
+    padding: 12px 30px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 1.25rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(98, 196, 98, 0.4);
+    border: 2px solid rgba(255,255,255,0.2);
+}
+
+#start a i, #game-over a i {
+    margin-right: 10px;
+}
+
+#start a:hover, #game-over a:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 6px 20px rgba(98, 196, 98, 0.6);
+    background: linear-gradient(135deg, #72d472 0%, #5cb85c 100%);
+    border-color: rgba(255,255,255,0.5);
+}
+
+#start a:active, #game-over a:active {
+    transform: translateY(1px) scale(1.0);
+    box-shadow: 0 2px 10px rgba(98, 196, 98, 0.3);
+}
+
+/* Final Score on Game Over Screen */
+.final-score {
+    margin: 25px auto;
+    padding: 20px;
+    background-color: rgba(0,0,0, 0.3);
+    border-radius: 15px;
+    border: 2px solid var(--gold);
+    box-shadow: 0 0 20px rgba(var(--gold-rgb), 0.3);
+    width: 80%;
+    max-width: 300px;
+}
+
+.final-score p {
+    color: var(--light-green);
+    font-size: 1rem;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.final-score #finalScore {
+    display: block;
+    font-size: 4rem;
+    color: var(--gold);
+    font-weight: 700;
+    margin: 5px 0 10px;
+    text-shadow: 0 0 15px rgba(var(--gold-rgb), 0.7), 0 0 30px rgba(var(--gold-rgb), 0.4);
+}
+
+.final-score #finalLevel {
+    font-weight: bold;
+    color: var(--primary-green);
+}
+
+/* Floating Instructions Panel */
+.instructions {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(var(--dark-green-rgb, 10, 61, 10), 0.85); /* Added fallback for --dark-green-rgb */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border-radius: 15px;
+    padding: 20px;
+    width: 280px;
+    max-width: 90vw;
+    z-index: 90;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    border: 2px solid rgba(var(--primary-green-rgb, 98, 196, 98), 0.5);
+    color: var(--light-green);
+    font-size: 0.95rem;
+}
+
+.instructions h3 {
+    font-size: 1.25rem;
+    color: var(--gold);
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(var(--primary-green-rgb, 98, 196, 98), 0.3);
+    display: flex;
+    align-items: center;
+}
+
+.instructions h3 i {
+    margin-right: 10px;
+    font-size: 1.1em;
+    color: var(--primary-green);
+}
+
+.instructions ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.instructions li {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+}
+
+.instructions li strong {
+    color: white; /* For better contrast of the action */
+}
+
+.key {
+    background-color: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 5px;
+    padding: 4px 8px;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: var(--gold);
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    margin-left: 5px; /* Space out multiple keys if any */
+}
+
+/* Ensure dark-green-rgb is defined or use static values */
+/* Add to :root if not there: --dark-green-rgb: 10, 61, 10; */
+
+/* Ensure these styles are placed before any media queries or general utility classes if they exist,
+   or at a suitable place for component styles. */
+
+.score-container span:first-child i,
+.level-container span:first-child i,
+.wallet-display span:first-child i {
+    margin-right: 8px;
+    opacity: 0.9;
+}
+
+#start h1, #game-over h1 {
+    font-size: 3rem;
+    color: var(--gold);
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px rgba(255, 255, 157, 0.6), 0 0 20px rgba(255, 255, 157, 0.3);
+    letter-spacing: 1px;
+}
+
+#start p, #game-over p {
+    color: var(--light-green);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Styling for buttons within start/game-over screens */
+#start a, #game-over a {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary-green) 0%, #4cae4c 100%);
+    color: white;
+    padding: 12px 30px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 1.25rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(98, 196, 98, 0.4);
+    border: 2px solid rgba(255,255,255,0.2);
+}
+
+#start a i, #game-over a i {
+    margin-right: 10px;
+}
+
+#start a:hover, #game-over a:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 6px 20px rgba(98, 196, 98, 0.6);
+    background: linear-gradient(135deg, #72d472 0%, #5cb85c 100%);
+    border-color: rgba(255,255,255,0.5);
+}
+
+#start a:active, #game-over a:active {
+    transform: translateY(1px) scale(1.0);
+    box-shadow: 0 2px 10px rgba(98, 196, 98, 0.3);
+}
+
+/* Final Score on Game Over Screen */
+.final-score {
+    margin: 25px auto;
+    padding: 20px;
+    background-color: rgba(0,0,0, 0.3);
+    border-radius: 15px;
+    border: 2px solid var(--gold);
+    box-shadow: 0 0 20px rgba(var(--gold-rgb), 0.3);
+    width: 80%;
+    max-width: 300px;
+}
+
+.final-score p {
+    color: var(--light-green);
+    font-size: 1rem;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.final-score #finalScore {
+    display: block;
+    font-size: 4rem;
+    color: var(--gold);
+    font-weight: 700;
+    margin: 5px 0 10px;
+    text-shadow: 0 0 15px rgba(var(--gold-rgb), 0.7), 0 0 30px rgba(var(--gold-rgb), 0.4);
+}
+
+.final-score #finalLevel {
+    font-weight: bold;
+    color: var(--primary-green);
+} 
