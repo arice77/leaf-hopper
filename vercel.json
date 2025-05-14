@@ -4,8 +4,7 @@
   "github": {
     "silent": true
   },
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/index.html" }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/leaf_hopper.html" }
   ]
 } 
